@@ -235,6 +235,21 @@ h1.hero-title .line2{
 .mkat:nth-child(even){
   transform: scale(1.04);
 }
+/* GALLERY FILTER BUTTONS */
+.gf-btn{
+  padding:8px 20px;
+  background:transparent;
+  border:2px solid var(--border);
+  border-radius:6px;
+  font-family:'Nunito',sans-serif;
+  font-size:12px;font-weight:800;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:rgba(13,13,13,0.5);
+  cursor:pointer;transition:all 0.2s;
+}
+.gf-btn:hover{border-color:var(--orange);color:var(--orange);}
+.gf-btn.active{background:var(--ink);border-color:var(--ink);color:var(--offwhite);}
+
 /* SECTION BASE */
 .section{padding:6rem 3rem;max-width:1200px;margin:0 auto;position:relative;z-index:1;}
 .sec-tag{
@@ -694,6 +709,7 @@ footer{
 <nav>
   <a class="nav-logo" href="#"><div class="nav-logo-dot"></div>Azukats</a>
   <ul class="nav-links">
+    <li><a href="#gallery">Gallery</a></li>
     <li><a href="#lookup">My Kats</a></li>
     <li><a href="#gridmaker">Grid Maker</a></li>
     <li><a href="#banner">Banner</a></li>
@@ -1038,6 +1054,217 @@ footer{
         </thead>
         <tbody id="rt-tbody"></tbody>
       </table>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTION GALLERY -->
+<section class="section" id="gallery" style="padding-top:5rem;padding-bottom:5rem;">
+  <div class="gallery-section-header" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;margin-bottom:2.5rem;">
+    <div>
+      <div class="sec-tag">The Collection</div>
+      <h2 class="sec-title">Meet the <span style="color:var(--orange);">Azukats</span></h2>
+      <p style="font-size:16px;font-weight:600;color:rgba(13,13,13,0.5);max-width:480px;line-height:1.6;margin-top:0.5rem;">2,222 unique Kat characters living on the Base blockchain. Each one different, each one yours to collect.</p>
+    </div>
+    <a href="https://opensea.io/collection/azukats-3" target="_blank" class="btn-primary" style="flex-shrink:0;">View Full Collection →</a>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="gallery-filters" id="gallery-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2rem;">
+    <button class="gf-btn active" onclick="galleryFilter('all', this)">All Kats</button>
+    <button class="gf-btn" onclick="galleryFilter('1', this)">Set 1</button>
+    <button class="gf-btn" onclick="galleryFilter('2', this)">Set 2</button>
+    <button class="gf-btn" onclick="galleryFilter('3', this)">Set 3</button>
+  </div>
+
+  <!-- Gallery grid -->
+  <div class="gallery-grid" id="showcase-grid">
+    <!-- Set 1: azukat1–14 -->
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat1.webp" loading="lazy" alt="Azukat #1">
+      <div class="kat-meta"><div class="kat-id">Kat #1</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat2.webp" loading="lazy" alt="Azukat #2">
+      <div class="kat-meta"><div class="kat-id">Kat #2</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat3.webp" loading="lazy" alt="Azukat #3">
+      <div class="kat-meta"><div class="kat-id">Kat #3</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat4.webp" loading="lazy" alt="Azukat #4">
+      <div class="kat-meta"><div class="kat-id">Kat #4</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat5.webp" loading="lazy" alt="Azukat #5">
+      <div class="kat-meta"><div class="kat-id">Kat #5</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat6.webp" loading="lazy" alt="Azukat #6">
+      <div class="kat-meta"><div class="kat-id">Kat #6</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat7.webp" loading="lazy" alt="Azukat #7">
+      <div class="kat-meta"><div class="kat-id">Kat #7</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat8.webp" loading="lazy" alt="Azukat #8">
+      <div class="kat-meta"><div class="kat-id">Kat #8</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat9.webp" loading="lazy" alt="Azukat #9">
+      <div class="kat-meta"><div class="kat-id">Kat #9</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat10.webp" loading="lazy" alt="Azukat #10">
+      <div class="kat-meta"><div class="kat-id">Kat #10</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat11.webp" loading="lazy" alt="Azukat #11">
+      <div class="kat-meta"><div class="kat-id">Kat #11</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat12.webp" loading="lazy" alt="Azukat #12">
+      <div class="kat-meta"><div class="kat-id">Kat #12</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat13.webp" loading="lazy" alt="Azukat #13">
+      <div class="kat-meta"><div class="kat-id">Kat #13</div></div>
+    </div>
+    <div class="kat-card" data-set="1">
+      <img src="/images/azukat14.webp" loading="lazy" alt="Azukat #14">
+      <div class="kat-meta"><div class="kat-id">Kat #14</div></div>
+    </div>
+    <!-- Set 2: azukat15–28 -->
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat15.webp" loading="lazy" alt="Azukat #15">
+      <div class="kat-meta"><div class="kat-id">Kat #15</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat16.webp" loading="lazy" alt="Azukat #16">
+      <div class="kat-meta"><div class="kat-id">Kat #16</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat17.webp" loading="lazy" alt="Azukat #17">
+      <div class="kat-meta"><div class="kat-id">Kat #17</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat18.webp" loading="lazy" alt="Azukat #18">
+      <div class="kat-meta"><div class="kat-id">Kat #18</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat19.webp" loading="lazy" alt="Azukat #19">
+      <div class="kat-meta"><div class="kat-id">Kat #19</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat20.webp" loading="lazy" alt="Azukat #20">
+      <div class="kat-meta"><div class="kat-id">Kat #20</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat21.webp" loading="lazy" alt="Azukat #21">
+      <div class="kat-meta"><div class="kat-id">Kat #21</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat22.webp" loading="lazy" alt="Azukat #22">
+      <div class="kat-meta"><div class="kat-id">Kat #22</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat23.webp" loading="lazy" alt="Azukat #23">
+      <div class="kat-meta"><div class="kat-id">Kat #23</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat24.webp" loading="lazy" alt="Azukat #24">
+      <div class="kat-meta"><div class="kat-id">Kat #24</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat25.webp" loading="lazy" alt="Azukat #25">
+      <div class="kat-meta"><div class="kat-id">Kat #25</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat26.webp" loading="lazy" alt="Azukat #26">
+      <div class="kat-meta"><div class="kat-id">Kat #26</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat27.webp" loading="lazy" alt="Azukat #27">
+      <div class="kat-meta"><div class="kat-id">Kat #27</div></div>
+    </div>
+    <div class="kat-card" data-set="2">
+      <img src="/images/azukat28.webp" loading="lazy" alt="Azukat #28">
+      <div class="kat-meta"><div class="kat-id">Kat #28</div></div>
+    </div>
+    <!-- Set 3: azukat29–43 -->
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat29.webp" loading="lazy" alt="Azukat #29">
+      <div class="kat-meta"><div class="kat-id">Kat #29</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat30.webp" loading="lazy" alt="Azukat #30">
+      <div class="kat-meta"><div class="kat-id">Kat #30</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat31.webp" loading="lazy" alt="Azukat #31">
+      <div class="kat-meta"><div class="kat-id">Kat #31</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat32.webp" loading="lazy" alt="Azukat #32">
+      <div class="kat-meta"><div class="kat-id">Kat #32</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat33.webp" loading="lazy" alt="Azukat #33">
+      <div class="kat-meta"><div class="kat-id">Kat #33</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat34.webp" loading="lazy" alt="Azukat #34">
+      <div class="kat-meta"><div class="kat-id">Kat #34</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat35.webp" loading="lazy" alt="Azukat #35">
+      <div class="kat-meta"><div class="kat-id">Kat #35</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat36.webp" loading="lazy" alt="Azukat #36">
+      <div class="kat-meta"><div class="kat-id">Kat #36</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat37.webp" loading="lazy" alt="Azukat #37">
+      <div class="kat-meta"><div class="kat-id">Kat #37</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat38.webp" loading="lazy" alt="Azukat #38">
+      <div class="kat-meta"><div class="kat-id">Kat #38</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat39.webp" loading="lazy" alt="Azukat #39">
+      <div class="kat-meta"><div class="kat-id">Kat #39</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat40.webp" loading="lazy" alt="Azukat #40">
+      <div class="kat-meta"><div class="kat-id">Kat #40</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat41.webp" loading="lazy" alt="Azukat #41">
+      <div class="kat-meta"><div class="kat-id">Kat #41</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat42.webp" loading="lazy" alt="Azukat #42">
+      <div class="kat-meta"><div class="kat-id">Kat #42</div></div>
+    </div>
+    <div class="kat-card" data-set="3">
+      <img src="/images/azukat43.webp" loading="lazy" alt="Azukat #43">
+      <div class="kat-meta"><div class="kat-id">Kat #43</div></div>
+    </div>
+  </div>
+
+  <!-- CTA banner under gallery -->
+  <div style="margin-top:3rem;background:var(--ink);border-radius:16px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;border:2px solid rgba(255,107,43,0.25);">
+    <div>
+      <div style="font-family:'Passion One',cursive;font-size:28px;letter-spacing:0.04em;color:var(--offwhite);line-height:1;">Don't have a Kat yet?</div>
+      <div style="font-size:14px;font-weight:600;color:rgba(250,247,242,0.45);margin-top:6px;">Join 530+ holders on Base blockchain</div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="https://opensea.io/collection/azukats-3" target="_blank" style="padding:12px 24px;background:var(--orange);border-radius:8px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--ink);letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">Get on OpenSea →</a>
+      <a href="#lookup" style="padding:12px 24px;background:transparent;border:2px solid rgba(250,247,242,0.2);border-radius:8px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--offwhite);letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">Check My Wallet</a>
     </div>
   </div>
 </section>
@@ -2054,7 +2281,22 @@ function loadImg(src){
   });
 }
 
-// Sample background color from corner pixels of loaded image
+// GALLERY FILTER
+function galleryFilter(set, btn) {
+  // Update active button
+  document.querySelectorAll('.gf-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  // Show/hide cards
+  document.querySelectorAll('#showcase-grid .kat-card').forEach(function(card){
+    if(set === 'all' || card.dataset.set === set){
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+
 function sampleBgColor(img){
   var tmp = document.createElement('canvas');
   tmp.width = 60; tmp.height = 60;
