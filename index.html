@@ -570,6 +570,10 @@ footer{
 .gpg-btn:hover:not(:disabled){background:var(--ink);color:white;}
 .gpg-btn:disabled{opacity:0.25;cursor:default;}
 .gpg-label{font-family:'Passion One',cursive;font-size:14px;letter-spacing:0.06em;color:rgba(13,13,13,0.5);}
+.gallery-pg-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;background:var(--ink);border:2px solid var(--ink);border-radius:8px;font-family:'Passion One',cursive;font-size:15px;letter-spacing:0.06em;color:white;cursor:pointer;transition:all 0.2s;line-height:1;}
+.gallery-pg-btn:hover:not(:disabled){background:var(--orange);border-color:var(--orange);color:var(--ink);}
+.gallery-pg-btn:disabled{opacity:0.25;cursor:default;}
+.gallery-pg-label{font-family:'Passion One',cursive;font-size:15px;letter-spacing:0.08em;color:rgba(13,13,13,0.4);}
 .grid-canvas-wrap{background:#0d0d0d;border:3px solid var(--ink);border-radius:10px;padding:2px;transition:background 0.2s;}
 .grid-canvas-wrap.bg-white{background:#ffffff;}
 .grid-canvas{display:grid;gap:2px;}
@@ -731,6 +735,7 @@ footer{
       <div class="hstat"><div class="hstat-n">2,222</div><div class="hstat-l">Total Supply</div></div>
       <div class="hstat"><div class="hstat-n">530</div><div class="hstat-l">Holders</div></div>
       <div class="hstat"><div class="hstat-n">0.002</div><div class="hstat-l">Floor ETH</div></div>
+      <div class="hstat"><div class="hstat-n">5.4%</div><div class="hstat-l">Listed</div></div>
     </div>
     <div class="hero-btns">
       <a class="btn-primary" href="#lookup">Find My Kats</a>
@@ -1077,7 +1082,7 @@ footer{
     </div>
     <div id="gallery-all-controls" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <span id="gallery-showing-label" style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:rgba(13,13,13,0.35);"></span>
-      <button id="gallery-shuffle-btn" onclick="shuffleGallery()" style="padding:8px 18px;background:var(--ink);border:none;border-radius:6px;font-family:'Passion One',cursive;font-size:14px;letter-spacing:0.06em;color:white;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--orange)';this.style.color='var(--ink)';" onmouseout="this.style.background='var(--ink)';this.style.color='white';">Shuffle</button>
+      <button id="gallery-shuffle-btn" onclick="shuffleGallery()" style="padding:8px 18px;background:var(--ink);border:none;border-radius:6px;font-family:'Passion One',cursive;font-size:14px;letter-spacing:0.06em;color:white;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--orange)';this.style.color='var(--ink)';" onmouseout="this.style.background='var(--ink)';this.style.color='white';"><span style="display:inline-flex;align-items:center;gap:7px;"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>Shuffle</span></button>
     </div>
   </div>
 
@@ -1099,6 +1104,7 @@ footer{
   <!-- Gallery grid (dynamic) -->
   <div class="results-grid" id="gallery-dynamic-grid" style="display:none;"></div>
   <div id="gallery-no-results" style="display:none;text-align:center;padding:3rem;font-family:'Passion One',cursive;font-size:22px;color:rgba(13,13,13,0.3);">No Kats match this filter — try another trait</div>
+  <div id="gallery-pagination" style="display:none;justify-content:center;align-items:center;gap:12px;margin-top:2rem;padding-top:1.5rem;border-top:2px solid var(--border);"></div>
 
   <!-- Hidden placeholder for old showcase-grid references -->
   <div id="showcase-grid" style="display:none;"><!-- static content removed --></div>
@@ -1342,38 +1348,32 @@ function rarityLabel(rank, attrs){
   var bgVal   = bgIdx   >= 0 ? vals[bgIdx]   : '';
   var eyesVal = eyesIdx >= 0 ? vals[eyesIdx] : '';
 
-  var solidBgs = ['blue','purple','dark blue','navy','grey','gray','orange','cream','beige','black','white','brown','red','green','teal','yellow','pink','dark purple','dark grey','light blue','light purple','dark green','dark red','dark orange','dark teal','dark brown','dark black','dark white','dark beige','dark cream','dark yellow','dark pink'];
-  var hasSolidBg    = bgVal === '' || solidBgs.some(function(s){ return bgVal === s; });
-  var hasRareBg     = bgVal !== '' && !hasSolidBg;
-  var hasGaiaForest = bgVal.includes('gaia forest');
+  // 3. Epic backgrounds — always Epic regardless of other traits
+  var epicBgs = ['gaia forest','ancient ruins','tournament house','river of spirits','mountains','samurai temple'];
+  var hasEpicBg = epicBgs.some(function(b){ return bgVal === b || bgVal.includes(b); });
 
-  // 3. Traits that are always Epic regardless of background
-  var alwaysEpic = ['full body','frog hoodie','golden armor'];
-  var hasAlwaysEpic = vals.some(function(v){ return alwaysEpic.some(function(t){ return v === t || v.includes(t); }); });
-  if(hasAlwaysEpic || hasGaiaForest || eyesVal.includes('godkat'))
+  // 4. Epic traits — always Epic regardless of background
+  var epicTraits = ['golden armor','frog hoodie','robot'];
+  var hasEpicTrait = vals.some(function(v){ return epicTraits.some(function(t){ return v === t || v.includes(t); }); });
+
+  // 5. Godkat eyes — always Epic
+  var hasGodkatEyes = eyesVal === 'godkat' || eyesVal.includes('godkat');
+
+  if(hasEpicBg || hasEpicTrait || hasGodkatEyes)
     return {label:'Epic', cls:'rarity-epic'};
 
-  // 4. Katana: Epic only if combined with another rare trait, otherwise Rare
+  // 6. Katana: Rare on its own
   var hasKatana = vals.some(function(v){ return v === 'katana' || v.includes('katana'); });
-  if(hasKatana){
-    var otherRare = ['frog hoodie','golden armor','samurai armor','samurai sword','hoodie','motorcycle helmet','great sword','golden tuxedo','namekusei','black suit','demon','godkat'];
-    var hasOtherRare = vals.some(function(v){
-      return otherRare.some(function(t){ return v === t || v.includes(t); });
-    }) || eyesVal.includes('demon') || eyesVal.includes('godkat') || hasRareBg;
-    if(hasOtherRare) return {label:'Epic', cls:'rarity-epic'};
-    return {label:'Rare', cls:'rarity-rare'};
-  }
+  if(hasKatana) return {label:'Rare', cls:'rarity-rare'};
 
-  // 5. Always Rare: demon eyes
+  // 7. Always Rare: demon eyes
   if(eyesVal.includes('demon'))
     return {label:'Rare', cls:'rarity-rare'};
 
-  // 6. Special traits: Rare alone, Epic with rare background
-  var specialTraits = ['hoodie','samurai armor','samurai sword','motorcycle helmet','red motorcycle helmet','black motorcycle helmet','great sword','golden tuxedo','namekusei','black suit'];
-  var hasSpecialTrait = vals.some(function(v){ return specialTraits.some(function(t){ return v === t || v.includes(t); }); });
-
-  if(hasRareBg && hasSpecialTrait) return {label:'Epic', cls:'rarity-epic'};
-  if(hasRareBg || hasSpecialTrait) return {label:'Rare', cls:'rarity-rare'};
+  // 8. Other Rare traits
+  var rareTraits = ['hoodie','samurai armor','samurai sword','motorcycle helmet','great sword','golden tuxedo','namekusei','black suit'];
+  var hasRareTrait = vals.some(function(v){ return rareTraits.some(function(t){ return v === t || v.includes(t); }); });
+  if(hasRareTrait) return {label:'Rare', cls:'rarity-rare'};
 
   return {label:'Common', cls:'rarity-common'};
 }
@@ -2130,12 +2130,14 @@ function loadImg(src){
 
 // ── GALLERY DYNAMIC LOADER ──
 var galleryTab = 'all';
-var galleryAllNfts = [];       // current loaded batch (60 random)
+var galleryAllNfts = [];       // all 2,222 kats (loaded once)
+var galleryFilteredNfts = [];  // after trait filters applied
 var galleryLegendaryNfts = []; // fixed legendary set
-var galleryLoaded = { legendary: false };
+var galleryLoaded = { all: false, legendary: false };
 var galleryActiveTraits = {};  // { traitType: value }
+var galleryCurrentPage = 0;
+var GALLERY_PAGE_SIZE = 60;
 
-var GALLERY_COUNT = 60;
 var LEGENDARY_IDS = [1847, 336, 788, 680, 249, 2036, 779, 260, 722, 1202, 1785, 1653, 817, 421];
 
 async function fetchNFTBatch(tokenIds){
@@ -2162,25 +2164,46 @@ function switchGalleryTab(tab, btn){
   if(tab === 'all'){
     allControls.style.display = 'flex';
     traitBar.style.display = galleryAllNfts.length ? 'block' : 'none';
-    loadGalleryAllKats();
+    if(!galleryLoaded.all){ loadGalleryAllKats(); }
+    else { galleryCurrentPage = 0; applyGalleryTraitFilters(); }
   } else {
     allControls.style.display = 'none';
     traitBar.style.display = 'none';
+    document.getElementById('gallery-pagination').style.display = 'none';
     if(!galleryLoaded.legendary){ loadGalleryLegendaryKats(); }
     else { renderGalleryCards(galleryLegendaryNfts); }
   }
 }
 
 async function loadGalleryAllKats(){
+  if(galleryLoaded.all){
+    galleryCurrentPage = 0;
+    applyGalleryTraitFilters();
+    return;
+  }
   setGalleryLoading(true);
   galleryActiveTraits = {};
   try {
-    var ids = new Set();
-    while(ids.size < GALLERY_COUNT){ ids.add(Math.floor(Math.random() * 2222) + 1); }
-    var nfts = await fetchNFTBatch(Array.from(ids));
-    galleryAllNfts = nfts;
-    buildGalleryTraitFilters(nfts);
+    var allNfts = [];
+    var pageKey = '';
+    var loadingLabel = document.querySelector('#gallery-loading div:last-child');
+    for(var p = 0; p < 23; p++){
+      if(loadingLabel) loadingLabel.textContent = 'Loading Kats… ' + allNfts.length + ' / 2,222';
+      var url = 'https://base-mainnet.g.alchemy.com/nft/v3/' + ALCHEMY_KEY +
+        '/getNFTsForCollection?contractAddress=' + CONTRACT + '&withMetadata=true&limit=100' +
+        (pageKey ? '&pageKey=' + encodeURIComponent(pageKey) : '');
+      var res = await fetch(url);
+      if(!res.ok) break;
+      var d = await res.json();
+      allNfts = allNfts.concat(d.nfts || []);
+      pageKey = d.pageKey || '';
+      if(!pageKey || !d.nfts || !d.nfts.length) break;
+    }
+    galleryAllNfts = allNfts;
+    galleryLoaded.all = true;
+    buildGalleryTraitFilters(allNfts);
     document.getElementById('gallery-trait-filters').style.display = 'block';
+    galleryCurrentPage = 0;
     applyGalleryTraitFilters();
   } catch(e){
     setGalleryLoading(false);
@@ -2189,13 +2212,14 @@ async function loadGalleryAllKats(){
 }
 
 function shuffleGallery(){
-  var btn = document.getElementById('gallery-shuffle-btn');
-  btn.textContent = '⏳ Loading...';
-  btn.disabled = true;
-  loadGalleryAllKats().finally(function(){
-    btn.textContent = '🔀 Shuffle';
-    btn.disabled = false;
+  if(!galleryAllNfts.length) return;
+  galleryAllNfts = shuffled(galleryAllNfts);
+  galleryActiveTraits = {};
+  document.querySelectorAll('#gallery-trait-dropdowns select').forEach(function(s){
+    s.value = ''; s.classList.remove('has-value');
   });
+  galleryCurrentPage = 0;
+  applyGalleryTraitFilters();
 }
 
 async function loadGalleryLegendaryKats(){
@@ -2272,13 +2296,67 @@ function applyGalleryTraitFilters(){
     return true;
   });
 
+  galleryFilteredNfts = filtered;
+  galleryCurrentPage = 0;
+  renderGalleryPage(0);
+}
+
+function renderGalleryPage(page){
+  var total = galleryFilteredNfts.length;
+  var totalPages = Math.max(1, Math.ceil(total / GALLERY_PAGE_SIZE));
+  galleryCurrentPage = Math.max(0, Math.min(page, totalPages - 1));
+
+  var start = galleryCurrentPage * GALLERY_PAGE_SIZE;
+  var slice = galleryFilteredNfts.slice(start, start + GALLERY_PAGE_SIZE);
+
   var noRes = document.getElementById('gallery-no-results');
-  noRes.style.display = filtered.length === 0 ? 'block' : 'none';
+  noRes.style.display = total === 0 ? 'block' : 'none';
 
   var label = document.getElementById('gallery-showing-label');
-  label.textContent = 'Showing ' + filtered.length + ' of ' + galleryAllNfts.length + ' Kats';
+  if(total === 0){
+    label.textContent = '0 Kats';
+  } else {
+    label.textContent = 'Showing ' + (start + 1) + '–' + Math.min(start + GALLERY_PAGE_SIZE, total) + ' of ' + total + ' Kats';
+  }
 
-  renderGalleryCards(filtered);
+  renderGalleryCards(slice);
+  renderGalleryPagination(galleryCurrentPage, totalPages);
+}
+
+function renderGalleryPagination(page, totalPages){
+  var container = document.getElementById('gallery-pagination');
+  if(!container) return;
+  container.innerHTML = '';
+  if(totalPages <= 1){ container.style.display = 'none'; return; }
+  container.style.display = 'flex';
+
+  var arrowLeft = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+  var arrowRight = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+
+  var prev = document.createElement('button');
+  prev.className = 'gallery-pg-btn';
+  prev.innerHTML = arrowLeft + 'Previous';
+  prev.disabled = page === 0;
+  prev.onclick = function(){
+    renderGalleryPage(galleryCurrentPage - 1);
+    window.scrollTo({ top: document.getElementById('gallery').offsetTop - 80, behavior: 'smooth' });
+  };
+  container.appendChild(prev);
+
+  var info = document.createElement('span');
+  info.className = 'gallery-pg-label';
+  info.textContent = 'Page ' + (page + 1) + ' of ' + totalPages;
+  container.appendChild(info);
+
+  var next = document.createElement('button');
+  next.className = 'gallery-pg-btn';
+  next.innerHTML = 'Next' + arrowRight;
+  next.disabled = page === totalPages - 1;
+  next.onclick = function(){
+    renderGalleryPage(galleryCurrentPage + 1);
+    window.scrollTo({ top: document.getElementById('gallery').offsetTop - 80, behavior: 'smooth' });
+  };
+  container.appendChild(next);
 }
 
 function clearGalleryFilters(){
@@ -2286,6 +2364,7 @@ function clearGalleryFilters(){
   document.querySelectorAll('#gallery-trait-dropdowns select').forEach(function(s){
     s.value = ''; s.classList.remove('has-value');
   });
+  galleryCurrentPage = 0;
   applyGalleryTraitFilters();
 }
 
