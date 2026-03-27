@@ -372,6 +372,15 @@ h1.hero-title .line2{
   transition:background 0.2s;flex-shrink:0;
 }
 #lookup-btn:hover{background:var(--gold);}
+#wallet-clear-btn{
+  padding:16px 14px;
+  background:white;border:none;
+  font-size:15px;font-weight:700;
+  color:rgba(13,13,13,0.3);cursor:pointer;
+  transition:color 0.2s;flex-shrink:0;
+  line-height:1;
+}
+#wallet-clear-btn:hover{color:var(--red);}
 .lookup-hint{
   font-size:12px;font-weight:600;
   color:rgba(250,247,242,0.25);
@@ -891,6 +900,7 @@ footer{
     <p class="lookup-sub">Enter your Base wallet address to see all your Kats — traits, rarity rank included. No wallet connection needed.</p>
     <div class="lookup-form">
       <input type="text" id="wallet-input" placeholder="Enter wallet address  0x..." autocomplete="off" spellcheck="false">
+      <button id="wallet-clear-btn" onclick="clearWalletInput()" title="Clear">✕</button>
       <button id="lookup-btn" onclick="lookupWallet()">Search</button>
     </div>
     <p class="lookup-hint">Works with any Base wallet · No signature required · Powered by Alchemy</p>
@@ -1519,6 +1529,11 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLb(); });
 document.getElementById('wallet-input').addEventListener('keydown', e=>{
   if(e.key === 'Enter') lookupWallet();
 });
+
+function clearWalletInput(){
+  document.getElementById('wallet-input').value = '';
+  document.getElementById('wallet-input').focus();
+}
 
 // Scroll reveal
 const obs = new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');});},{threshold:0.1});
