@@ -537,15 +537,31 @@ footer{
 
 /* RESPONSIVE */
 @media(max-width:900px){
-  .hero{grid-template-columns:1fr;}
+  .hero{grid-template-columns:1fr;overflow:hidden;}
+  .hero-left{padding:3rem 1.5rem 3rem 1.5rem;}
   .hero-right{display:none;}
   .gallery-grid,.results-grid{grid-template-columns:repeat(2,1fr);}
   nav{padding:0.8rem 1.2rem;}
   .nav-links{display:none;}
 }
+@media(max-width:480px){
+  .hero-left{padding:2.5rem 1.2rem;}
+  .hero-stats{gap:1rem;flex-wrap:wrap;}
+  .hero-btns{flex-wrap:wrap;}
+  .btn-primary,.btn-outline{width:100%;text-align:center;}
+}
 
-.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.6s,transform 0.6s;}
-.reveal.on{opacity:1;transform:none;}
+.result-img.img-broken{
+  aspect-ratio:1;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--cream);
+  border-bottom:2px solid var(--border);
+}
+.result-img.img-broken::after{
+  content:'🐱';
+  font-size:48px;
+  opacity:0.3;
+}
 .d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}
 
 .stroke-title{
@@ -743,7 +759,7 @@ footer{
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n">2,222</div><div class="hstat-l">Total Supply</div></div>
       <div class="hstat"><div class="hstat-n">530</div><div class="hstat-l">Holders</div></div>
-      <div class="hstat"><div class="hstat-n">0.0018</div><div class="hstat-l">Floor ETH</div></div>
+      <div class="hstat"><div class="hstat-n">0.002</div><div class="hstat-l">Floor ETH</div></div>
       <div class="hstat"><div class="hstat-n">5.4%</div><div class="hstat-l">Listed</div></div>
     </div>
     <div class="hero-btns">
@@ -1449,6 +1465,7 @@ async function lookupWallet(){
       const tokenId = parseInt(nft.tokenId, 10);
       const name = 'Azukat #' + tokenId;
       const img = (nft.image && (nft.image.cachedUrl || nft.image.originalUrl)) || (nft.metadata && nft.metadata.image) || '';
+      const imgFallback = (nft.image && nft.image.originalUrl) || '';
       const attrs = (nft.raw && nft.raw.metadata && nft.raw.metadata.attributes) || (nft.metadata && nft.metadata.attributes) || [];
       const rank = (nft.rarity && nft.rarity.rank) || traitScore(attrs);
       const rarity = rarityLabel(rank, attrs);
@@ -1462,7 +1479,7 @@ async function lookupWallet(){
       card.className = 'result-card';
       card.innerHTML =
         '<div class="result-img">' +
-          '<img src="' + img + '" alt="' + name + '" loading="lazy">' +
+          '<img src="' + img + '" alt="' + name + '" loading="lazy" data-fallback="' + imgFallback + '" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;}else{this.onerror=null;this.src=\'\';this.style.display=\'none\';this.parentNode.classList.add(\'img-broken\');}">' +
           '<div class="result-rarity ' + rarity.cls + '">' + rarity.label + '</div>' +
         '</div>' +
         '<div class="result-body">' +
@@ -2423,7 +2440,8 @@ function renderGalleryCards(nfts){
   nfts.forEach(function(nft){
     var tokenId = parseInt(nft.tokenId, 10);
     var name = 'Azukat #' + tokenId;
-    var img = (nft.image && (nft.image.cachedUrl || nft.image.originalUrl)) || '';
+    var img = (tokenId === 2074) ? '/images/azukat2074.webp' : ((nft.image && (nft.image.cachedUrl || nft.image.originalUrl)) || '');
+    var imgFallback = (tokenId === 2074) ? '/images/azukat2074.webp' : ((nft.image && nft.image.originalUrl) || '');
     var attrs = (nft.raw && nft.raw.metadata && nft.raw.metadata.attributes) || (nft.metadata && nft.metadata.attributes) || [];
     var rank = (nft.rarity && nft.rarity.rank) || traitScore(attrs);
     var rarity = rarityLabel(rank, attrs);
@@ -2437,7 +2455,7 @@ function renderGalleryCards(nfts){
     card.className = 'result-card';
     card.innerHTML =
       '<div class="result-img">' +
-        '<img src="' + img + '" alt="' + name + '" loading="lazy">' +
+        '<img src="' + img + '" alt="' + name + '" loading="lazy" data-fallback="' + imgFallback + '" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;}else{this.onerror=null;this.src=\'\';this.style.display=\'none\';this.parentNode.classList.add(\'img-broken\');}">' +
         '<div class="result-rarity ' + rarity.cls + '">' + rarity.label + '</div>' +
       '</div>' +
       '<div class="result-body">' +
