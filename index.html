@@ -705,6 +705,59 @@ footer{
 .grid-canvas-wrap.banner-mode{aspect-ratio:3/1 !important;}
 .grid-canvas-wrap.banner-mode .grid-canvas{gap:2px;}
 .grid-canvas-wrap.banner-mode .grid-slot{aspect-ratio:1 !important;}
+
+/* ── MOBILE HERO FIX ── */
+@media(max-width:768px){
+  .hero{
+    grid-template-columns: 1fr;
+    min-height: auto;
+    overflow: hidden;
+  }
+  .hero-left{
+    padding: 3rem 1.5rem 2.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  h1.hero-title{
+    font-size: clamp(52px, 14vw, 80px);
+  }
+  .hero-sub{
+    font-size: 15px;
+    max-width: 100%;
+  }
+  .hero-stats{
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .hstat-n{
+    font-size: 26px;
+  }
+  /* Show the marquee as a short decorative strip below the text */
+  .hero-right{
+    height: 220px;
+    gap: 10px;
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  }
+  /* Only show 2 columns on mobile, hide the third */
+  .hero-right .marquee-col:nth-child(3){
+    display: none;
+  }
+  .marquee-col{
+    width: 140px;
+  }
+  .mkat{
+    width: 140px;
+    height: 140px;
+  }
+  .hero-btns{
+    flex-wrap: wrap;
+  }
+  .btn-primary, .btn-outline{
+    padding: 12px 22px;
+    font-size: 13px;
+  }
+}
 </style>
 </head>
 <body>
