@@ -743,7 +743,7 @@ footer{
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n">2,222</div><div class="hstat-l">Total Supply</div></div>
       <div class="hstat"><div class="hstat-n">530</div><div class="hstat-l">Holders</div></div>
-      <div class="hstat"><div class="hstat-n">0.0018</div><div class="hstat-l">Floor ETH</div></div>
+      <div class="hstat"><div class="hstat-n">0.002</div><div class="hstat-l">Floor ETH</div></div>
       <div class="hstat"><div class="hstat-n">5.4%</div><div class="hstat-l">Listed</div></div>
     </div>
     <div class="hero-btns">
@@ -1099,10 +1099,15 @@ footer{
 
   <!-- Trait filters for All Kats tab -->
   <div id="gallery-trait-filters" style="display:none;background:var(--cream);border:2px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;">
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+      <div class="kat-search-wrap">
+        <input type="number" id="gallery-id-search" placeholder="Search by Token ID" min="1" max="2222" oninput="applyGalleryTraitFilters()">
+      </div>
+      <button onclick="clearGalleryFilters()" class="kat-filter-clear">Clear filters</button>
+    </div>
     <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
       <span style="font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:rgba(13,13,13,0.4);">Filter by trait</span>
       <div id="gallery-trait-dropdowns" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
-      <button onclick="clearGalleryFilters()" style="padding:6px 14px;border:2px solid var(--ink);border-radius:6px;font-family:'Passion One',cursive;font-size:12px;letter-spacing:0.06em;color:var(--ink);background:white;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--ink)';this.style.color='white';" onmouseout="this.style.background='white';this.style.color='var(--ink)';">Clear</button>
     </div>
   </div>
 
@@ -2316,7 +2321,9 @@ function buildGalleryTraitFilters(nfts){
 }
 
 function applyGalleryTraitFilters(){
+  var idSearch = parseInt(document.getElementById('gallery-id-search').value, 10) || null;
   var filtered = galleryAllNfts.filter(function(nft){
+    if(idSearch && parseInt(nft.tokenId, 10) !== idSearch) return false;
     var attrs = (nft.raw && nft.raw.metadata && nft.raw.metadata.attributes) || [];
     for(var type in galleryActiveTraits){
       var val = galleryActiveTraits[type];
@@ -2395,6 +2402,7 @@ function renderGalleryPagination(page, totalPages){
 
 function clearGalleryFilters(){
   galleryActiveTraits = {};
+  document.getElementById('gallery-id-search').value = '';
   document.querySelectorAll('#gallery-trait-dropdowns select').forEach(function(s){
     s.value = ''; s.classList.remove('has-value');
   });
