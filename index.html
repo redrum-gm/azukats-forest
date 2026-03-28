@@ -759,7 +759,7 @@ footer{
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n">2,222</div><div class="hstat-l">Total Supply</div></div>
       <div class="hstat"><div class="hstat-n">530</div><div class="hstat-l">Holders</div></div>
-      <div class="hstat"><div class="hstat-n">0.0018</div><div class="hstat-l">Floor ETH</div></div>
+      <div class="hstat"><div class="hstat-n">0.002</div><div class="hstat-l">Floor ETH</div></div>
       <div class="hstat"><div class="hstat-n">5.4%</div><div class="hstat-l">Listed</div></div>
     </div>
     <div class="hero-btns">
@@ -1547,6 +1547,41 @@ function openLb(img, name, attrs, tokenId){
 }
 function closeLb(){ document.getElementById('lightbox').classList.remove('open'); }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLb(); });
+
+// ── HERO CARD LIGHTBOX ──
+// Wire up each .hero-card image so clicking it opens the shared lightbox
+// instead of navigating straight to OpenSea (the card's own onclick still
+// opens OpenSea when the user clicks anywhere outside the image).
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.hero-card').forEach(function(card){
+    var img = card.querySelector('img');
+    if(!img) return;
+
+    // Extract token ID from the card's opensea URL (onclick attr)
+    var onclickAttr = card.getAttribute('onclick') || '';
+    var tokenMatch  = onclickAttr.match(/\/(\d+)['",]/);
+    var tokenId     = tokenMatch ? parseInt(tokenMatch[1], 10) : 0;
+
+    // Name comes from .hero-card-name; fall back to "Azukat #<id>"
+    var nameEl  = card.querySelector('.hero-card-name');
+    var name    = nameEl ? nameEl.textContent.trim() : ('Azukat #' + tokenId);
+
+    // Build a simple attrs array from .hero-card-trait text ("Iron Man · 1/1")
+    var traitEl   = card.querySelector('.hero-card-trait');
+    var traitText = traitEl ? traitEl.textContent.trim() : '';
+    var attrs = traitText
+      ? [{ trait_type: 'Hero', value: traitText }]
+      : [];
+
+    img.style.cursor = 'zoom-in';
+
+    img.addEventListener('click', function(e){
+      e.stopPropagation(); // don't trigger the card's OpenSea link
+      openLb(img.src, name, attrs, tokenId);
+      document.getElementById('lb-os').href = 'https://opensea.io/item/base/0xBd46c708Ee55Acd6c258Bf849aBcce92DC689942/' + tokenId;
+    });
+  });
+});
 
 document.getElementById('wallet-input').addEventListener('keydown', e=>{
   if(e.key === 'Enter') lookupWallet();
