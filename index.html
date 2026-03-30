@@ -535,20 +535,125 @@ footer{
 .lb-traits{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
 .lb-x{position:absolute;top:1.5rem;right:2rem;font-size:28px;color:white;cursor:pointer;background:none;border:none;font-weight:700;}
 
-/* RESPONSIVE */
+/* ── HAMBURGER MENU ── */
+.nav-hamburger{
+  display:none;
+  flex-direction:column;justify-content:space-between;
+  width:26px;height:18px;
+  background:none;border:none;cursor:pointer;padding:0;
+}
+.nav-hamburger span{
+  display:block;width:100%;height:2px;
+  background:var(--offwhite);border-radius:2px;
+  transition:all 0.25s;
+}
+.nav-hamburger.open span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+
+.mobile-menu{
+  display:none;
+  position:fixed;top:56px;left:0;right:0;
+  background:var(--ink);
+  border-bottom:3px solid var(--orange);
+  z-index:99;
+  padding:1rem 1.4rem 1.4rem;
+  flex-direction:column;
+  gap:0;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{
+  font-size:15px;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:rgba(250,247,242,0.6);text-decoration:none;
+  padding:0.75rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  transition:color 0.2s;
+}
+.mobile-menu a:last-child{border-bottom:none;}
+.mobile-menu a:hover{color:var(--orange);}
+.mobile-menu .mobile-os-link{
+  margin-top:0.8rem;
+  padding:12px 18px;
+  background:var(--orange);
+  border-radius:8px;
+  text-align:center;
+  color:var(--ink) !important;
+  font-weight:800;
+  border-bottom:none;
+}
+
+/* ── RESPONSIVE: TABLET (max 900px) ── */
 @media(max-width:900px){
-  .hero{grid-template-columns:1fr;overflow:hidden;}
-  .hero-left{padding:3rem 1.5rem 3rem 1.5rem;}
-  .hero-right{display:none;}
-  .gallery-grid,.results-grid{grid-template-columns:repeat(2,1fr);}
   nav{padding:0.8rem 1.2rem;}
   .nav-links{display:none;}
+  .nav-os{display:none;}
+  .nav-hamburger{display:flex;}
+
+  .hero{grid-template-columns:1fr;overflow:hidden;}
+  .hero-left{padding:3.5rem 1.4rem 3rem;}
+  .hero-right{display:none;}
+  .gallery-grid,.results-grid{grid-template-columns:repeat(2,1fr);}
+
+  .section{padding:4rem 1.4rem;}
+  .lookup-wrap{padding:3rem 1.4rem;}
+  #results-section{padding:3rem 1.4rem;}
+  .traits-section{padding:4rem 1.4rem;}
+  .heroes-sec{padding:4rem 1.4rem;}
+  .limited-sec{padding:4rem 1.4rem;}
+  .grid-sec{padding:4rem 1.4rem;}
+  footer{padding:2rem 1.4rem;}
+
+  .gallery-section-header{flex-direction:column;align-items:flex-start !important;}
+  .gallery-section-header > a{width:100%;text-align:center;box-sizing:border-box;}
+
+  #gallery-all-controls{flex-wrap:wrap;}
+
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:1.2rem;}
+  .footer-links{flex-wrap:wrap;gap:1rem;}
+  .footer-note{font-size:10px;word-break:break-all;}
+
+  .lb-x{top:0.8rem;right:1rem;font-size:24px;}
+  .lb-card{width:94%;max-height:90vh;overflow-y:auto;}
 }
+
+/* ── RESPONSIVE: MOBILE (max 480px) ── */
 @media(max-width:480px){
-  .hero-left{padding:2.5rem 1.2rem;}
-  .hero-stats{gap:1rem;flex-wrap:wrap;}
-  .hero-btns{flex-wrap:wrap;}
-  .btn-primary,.btn-outline{width:100%;text-align:center;}
+  .hero-left{padding:2.5rem 1.2rem 2rem;}
+  .hero-stats{gap:0.8rem;flex-wrap:wrap;}
+  .hero-btns{flex-direction:column;gap:10px;}
+  .btn-primary,.btn-outline{width:100%;text-align:center;box-sizing:border-box;}
+
+  .section{padding:3rem 1.2rem;}
+  .lookup-wrap{padding:2.5rem 1.2rem;}
+  #results-section{padding:2.5rem 1.2rem;}
+  .traits-section{padding:3rem 1.2rem;}
+  .heroes-sec{padding:3rem 1.2rem;}
+  .limited-sec{padding:3rem 1.2rem;}
+  .grid-sec{padding:3rem 1.2rem;}
+
+  .gallery-grid,.results-grid{grid-template-columns:1fr;}
+  .heroes-grid{grid-template-columns:1fr !important;}
+  .limited-grid{grid-template-columns:1fr !important;}
+
+  .lookup-form{flex-direction:column;border-radius:10px;}
+  #wallet-input{padding:14px 16px;border-radius:8px 8px 0 0;}
+  #lookup-btn{padding:14px 16px;border-radius:0 0 8px 8px;width:100%;}
+  #wallet-clear-btn{display:none;}
+
+  .kat-search-wrap input{width:100% !important;box-sizing:border-box;}
+  .kat-trait-dropdowns{gap:6px;}
+  .kat-trait-drop select{min-width:0;width:100%;box-sizing:border-box;}
+
+  .heroes-stats{flex-wrap:wrap;gap:1.2rem;}
+  .trait-pill{font-size:10px;padding:3px 7px;}
+
+  .footer-links{gap:0.8rem;}
+
+  /* Gallery CTA banner */
+  .gallery-cta-banner{flex-direction:column !important;padding:1.8rem 1.2rem !important;gap:1.2rem !important;}
+  .gallery-cta-banner > div:last-child{display:flex !important;flex-direction:column;width:100%;gap:10px;}
+  .gallery-cta-banner a{text-align:center !important;width:100%;box-sizing:border-box;}
 }
 
 .result-img.img-broken{
@@ -748,7 +853,23 @@ footer{
     <li><a href="https://x.com/azukatsonbase" target="_blank">X</a></li>
   </ul>
   <a class="nav-os" href="https://opensea.io/collection/azukats-3" target="_blank">View on OpenSea</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#gallery" onclick="closeMobileMenu()">Gallery</a>
+  <a href="#lookup" onclick="closeMobileMenu()">My Kats</a>
+  <a href="#gridmaker" onclick="closeMobileMenu()">Grid Maker</a>
+  <a href="#banner" onclick="closeMobileMenu()">Banner</a>
+  <a href="#traits" onclick="closeMobileMenu()">Traits</a>
+  <a href="#heroes" onclick="closeMobileMenu()">Heroes</a>
+  <a href="#limited" onclick="closeMobileMenu()">Limited Editions</a>
+  <a href="https://x.com/azukatsonbase" target="_blank" onclick="closeMobileMenu()">X (Twitter)</a>
+  <a href="https://opensea.io/collection/azukats-3" target="_blank" class="mobile-os-link" onclick="closeMobileMenu()">View on OpenSea →</a>
+</div>
 <section class="hero">
   <div class="hero-left reveal">
     <div class="hero-tag">Base Blockchain · 2,222 Kats</div>
@@ -758,8 +879,8 @@ footer{
     <p class="hero-sub">2,222 unique characters on Base — warriors, artists, and enjoyers from a distant world.</p>
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n">2,222</div><div class="hstat-l">Total Supply</div></div>
-      <div class="hstat"><div class="hstat-n">531</div><div class="hstat-l">Holders</div></div>
-      <div class="hstat"><div class="hstat-n">0.0018</div><div class="hstat-l">Floor ETH</div></div>
+      <div class="hstat"><div class="hstat-n">530</div><div class="hstat-l">Holders</div></div>
+      <div class="hstat"><div class="hstat-n">0.002</div><div class="hstat-l">Floor ETH</div></div>
       <div class="hstat"><div class="hstat-n">5.4%</div><div class="hstat-l">Listed</div></div>
     </div>
     <div class="hero-btns">
@@ -1142,7 +1263,7 @@ footer{
   <div id="showcase-grid" style="display:none;"><!-- static content removed --></div>
 
   <!-- CTA banner under gallery -->
-  <div style="margin-top:3rem;background:var(--ink);border-radius:16px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;border:2px solid rgba(255,107,43,0.25);">
+  <div class="gallery-cta-banner" style="margin-top:3rem;background:var(--ink);border-radius:16px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;border:2px solid rgba(255,107,43,0.25);">
     <div>
       <div style="font-family:'Passion One',cursive;font-size:28px;letter-spacing:0.04em;color:var(--offwhite);line-height:1;">Don't have a Kat yet?</div>
       <div style="font-size:14px;font-weight:600;color:rgba(250,247,242,0.45);margin-top:6px;">Join 530+ holders on Base blockchain</div>
@@ -1546,6 +1667,26 @@ function openLb(img, name, attrs, tokenId){
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLb(){ document.getElementById('lightbox').classList.remove('open'); }
+
+// ── MOBILE MENU ──
+function toggleMobileMenu(){
+  var menu = document.getElementById('mobile-menu');
+  var btn  = document.getElementById('nav-hamburger');
+  var open = menu.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+function closeMobileMenu(){
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('open');
+}
+// Close menu when clicking outside
+document.addEventListener('click', function(e){
+  var menu = document.getElementById('mobile-menu');
+  var btn  = document.getElementById('nav-hamburger');
+  if(menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)){
+    closeMobileMenu();
+  }
+});
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLb(); });
 
 // ── HERO CARD LIGHTBOX ──
