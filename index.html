@@ -1197,12 +1197,16 @@ footer{
     <div class="gallery-filters" id="gallery-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin:0;">
       <button class="gf-btn active" id="gf-all" onclick="switchGalleryTab('all', this)">All Kats</button>
       <button class="gf-btn" id="gf-legendary" onclick="switchGalleryTab('legendary', this)">⭐ Legendary Kats</button>
+      <button class="gf-btn" id="gallery-toggle-btn" onclick="toggleGallery()">Hide Gallery</button>
     </div>
     <div id="gallery-all-controls" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <span id="gallery-showing-label" style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:rgba(13,13,13,0.35);"></span>
       <button id="gallery-shuffle-btn" onclick="shuffleGallery()" style="padding:8px 18px;background:var(--ink);border:none;border-radius:6px;font-family:'Passion One',cursive;font-size:14px;letter-spacing:0.06em;color:white;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--orange)';this.style.color='var(--ink)';" onmouseout="this.style.background='var(--ink)';this.style.color='white';"><span style="display:inline-flex;align-items:center;gap:7px;"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>Shuffle</span></button>
     </div>
   </div>
+
+  <!-- Collapsible gallery body -->
+  <div id="gallery-body">
 
   <!-- Trait filters for All Kats tab -->
   <div id="gallery-trait-filters" style="display:none;background:var(--cream);border:2px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;">
@@ -1231,6 +1235,8 @@ footer{
 
   <!-- Hidden placeholder for old showcase-grid references -->
   <div id="showcase-grid" style="display:none;"><!-- static content removed --></div>
+
+  </div><!-- /gallery-body -->
 
   <!-- CTA banner under gallery -->
   <div class="gallery-cta-banner" style="margin-top:3rem;background:var(--ink);border-radius:16px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;border:2px solid rgba(255,107,43,0.25);">
@@ -1798,13 +1804,6 @@ function applyCustomGrid(){
   renderGridCanvas();
 }
 
-function toggleGallery(){
-  var content = document.getElementById('gallery-content');
-  var btn = document.getElementById('gallery-toggle');
-  var hidden = content.style.display === 'none';
-  content.style.display = hidden ? '' : 'none';
-  btn.textContent = hidden ? 'Hide Gallery ▲' : 'Show Gallery ▼';
-}
 
 function setBg(color, btn){
   gridBg = color;
@@ -2441,6 +2440,15 @@ async function loadGalleryAllKats(){
     setGalleryLoading(false);
     console.error('Gallery load error:', e);
   }
+}
+
+function toggleGallery(){
+  var body = document.getElementById('gallery-body');
+  var btn  = document.getElementById('gallery-toggle-btn');
+  var hidden = body.style.display === 'none';
+  body.style.display = hidden ? '' : 'none';
+  btn.textContent = hidden ? 'Hide Gallery' : 'Show Gallery';
+  btn.classList.toggle('active', hidden);
 }
 
 function shuffleGallery(){
