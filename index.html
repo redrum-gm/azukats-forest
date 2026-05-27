@@ -1962,7 +1962,7 @@ async function downloadGrid(){
         img.onerror = function(){
           var controller = new AbortController();
           var tid = setTimeout(function(){ controller.abort(); resolve(false); }, 4000);
-          fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(src), { signal: controller.signal })
+          fetch('https://api.cors.syrins.tech/?url=' + encodeURIComponent(src), { signal: controller.signal })
             .then(function(r){ return r.blob(); })
             .then(function(b){
               var u = URL.createObjectURL(b);
@@ -2848,7 +2848,7 @@ function loadBannerImg(src){
     img.onerror = function(){
       var controller = new AbortController();
       var tid = setTimeout(function(){ controller.abort(); resolve(null); }, 4000);
-      fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(src), { signal: controller.signal })
+      fetch('https://api.cors.syrins.tech/?url=' + encodeURIComponent(src), { signal: controller.signal })
         .then(function(r){ return r.blob(); })
         .then(function(b){
           var u = URL.createObjectURL(b);
