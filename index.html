@@ -1642,7 +1642,7 @@ async function lookupWallet(){
     // Populate grid maker
     gridPool = nfts.map(function(nft){
       return {
-        img: (nft.image && (nft.image.cachedUrl || nft.image.originalUrl)) || '',
+        img: (nft.image && (nft.image.cachedUrl || nft.image.originalUrl)) || (nft.metadata && nft.metadata.image) || '',
         name: 'Azukat #' + parseInt(nft.tokenId, 10)
       };
     });
@@ -1953,16 +1953,27 @@ async function downloadGrid(){
     var ctx = cvs.getContext('2d');
     ctx.fillStyle = gridBg;
     ctx.fillRect(0, 0, totalW, totalH);
-    function fetchAsBlob(src){
-      return fetch(src, {mode:'cors'}).then(function(r){return r.blob();}).then(function(b){return URL.createObjectURL(b);}).catch(function(){return null;});
-    }
-    function drawFromUrl(url, x, y, w, h){
+    function loadAndDraw(src, x, y, w, h){
       return new Promise(function(resolve){
-        if(!url){resolve(false);return;}
+        var cb = (src.indexOf('?') > -1 ? '&' : '?') + '_cb=' + Date.now();
         var img = new Image();
-        img.onload = function(){ ctx.drawImage(img,x,y,w,h); if(url.startsWith('blob:'))URL.revokeObjectURL(url); resolve(true); };
-        img.onerror = function(){ if(url.startsWith('blob:'))URL.revokeObjectURL(url); resolve(false); };
-        img.src = url;
+        img.crossOrigin = 'anonymous';
+        img.onload = function(){ ctx.drawImage(img,x,y,w,h); resolve(true); };
+        img.onerror = function(){
+          var controller = new AbortController();
+          var tid = setTimeout(function(){ controller.abort(); resolve(false); }, 4000);
+          fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(src), { signal: controller.signal })
+            .then(function(r){ return r.blob(); })
+            .then(function(b){
+              var u = URL.createObjectURL(b);
+              var i2 = new Image();
+              i2.onload = function(){ clearTimeout(tid); ctx.drawImage(i2,x,y,w,h); URL.revokeObjectURL(u); resolve(true); };
+              i2.onerror = function(){ clearTimeout(tid); URL.revokeObjectURL(u); resolve(false); };
+              i2.src = u;
+            })
+            .catch(function(){ clearTimeout(tid); resolve(false); });
+        };
+        img.src = src + cb;
       });
     }
     for(var i=0; i<gridCols*gridRows; i++){
@@ -1971,14 +1982,7 @@ async function downloadGrid(){
       if(gridSlots[i] && gridSlots[i].img){
         btn.textContent = 'Loading '+(i+1)+'/'+(gridCols*gridRows)+'...';
         var imgSrc = gridSlots[i].img;
-        var drawn;
-        if(gridSlots[i].isLogo){
-          // Logo is a local image path — draw directly
-          drawn = await drawFromUrl(imgSrc, x, y, cellSize, cellSize);
-        } else {
-          var blobUrl = await fetchAsBlob(imgSrc);
-          drawn = await drawFromUrl(blobUrl,x,y,cellSize,cellSize);
-        }
+        var drawn = await loadAndDraw(imgSrc, x, y, cellSize, cellSize);
         if(!drawn){ ctx.fillStyle=gridBg==='#ffffff'?'#ddd':'#222'; ctx.fillRect(x,y,cellSize,cellSize); }
       } else {
         ctx.fillStyle=gridBg==='#ffffff'?'#eee':'#1a1a1a'; ctx.fillRect(x,y,cellSize,cellSize);
@@ -2837,9 +2841,25 @@ function renderBanners(){
 
 function loadBannerImg(src){
   return new Promise(function(resolve){
-    var img=new Image(); img.crossOrigin='anonymous';
-    img.onload=function(){resolve(img);}; img.onerror=function(){resolve(null);};
-    img.src=src;
+    var cb = (src.indexOf('?') > -1 ? '&' : '?') + '_cb=' + Date.now();
+    var img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function(){ resolve(img); };
+    img.onerror = function(){
+      var controller = new AbortController();
+      var tid = setTimeout(function(){ controller.abort(); resolve(null); }, 4000);
+      fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(src), { signal: controller.signal })
+        .then(function(r){ return r.blob(); })
+        .then(function(b){
+          var u = URL.createObjectURL(b);
+          var i2 = new Image();
+          i2.onload = function(){ clearTimeout(tid); URL.revokeObjectURL(u); resolve(i2); };
+          i2.onerror = function(){ clearTimeout(tid); URL.revokeObjectURL(u); resolve(null); };
+          i2.src = u;
+        })
+        .catch(function(){ clearTimeout(tid); resolve(null); });
+    };
+    img.src = src + cb;
   });
 }
 
